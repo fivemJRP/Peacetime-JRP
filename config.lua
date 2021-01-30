@@ -4,7 +4,7 @@ Config = {}
 Config.Command = 'peacetime'
 
 --Chat suggestion for command
-Config.CommandSuggestion = 'Toggle peacetime for the JRP Staff'
+Config.CommandSuggestion = 'Toggle peacetime'
 
 --ACE Permission required to run the command
 Config.ACEPerm = 'peacetime.toggle'

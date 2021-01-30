@@ -4,6 +4,10 @@ Citizen.CreateThread(function()
     TriggerEvent('chat:addSuggestion', '/' .. Config.Command, Config.CommandSuggestion)
 end)
 
+AddEventHandler('playerSpawned', function()
+    TriggerServerEvent('peacetime:sync')
+end)
+
 RegisterNetEvent('peacetime:toggle')
 AddEventHandler('peacetime:toggle', function(status)
     peacetimeActive = status
