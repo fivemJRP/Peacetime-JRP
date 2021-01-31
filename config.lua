@@ -18,3 +18,9 @@ Config.Message = {
     Active = 'Peacetime has been activated!',
     Deactive = 'Peacetime has been deactivated!',
 }
+
+--Discord Webhook Link
+Config.WebhookURL = ''
+
+--This is the name of the "user" that will post the webhook
+Config.WebhookName = 'Peacetime Logs'

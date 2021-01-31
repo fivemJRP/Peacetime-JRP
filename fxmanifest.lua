@@ -1,8 +1,9 @@
 fx_version 'cerulean'
 games {'gta5'}
 
-description 'Peacetime Shooting Prevention and Announcement for JRP'
-author 'JRP Development Team'
+description 'Peacetime Shooting Prevention and Announcement'
+author 'Scott M'
+version 'v1.2'
 
 shared_scripts {
     'config.lua',
