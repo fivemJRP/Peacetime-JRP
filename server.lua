@@ -35,21 +35,24 @@ RegisterCommand(Config.Command, function(source, args, rawCommand)
     playerCooldowns[source] = now
     
     Citizen.Wait(100)  -- Throttle rapid toggles
+    local duration = tonumber(args[1]) or Config.Duration  -- Use argument or config default
+    if duration < 0 then duration = 0 end  -- Ensure non-negative
     peacetimeActive = not peacetimeActive
     -- Send to each player with their bypass status
     for _, playerId in ipairs(GetPlayers()) do
         local hasBypass = Config.AllowAdminBypass and IsPlayerAceAllowed(playerId, Config.ACEPerm) or false
         TriggerClientEvent('peacetime:toggle', playerId, peacetimeActive, GetPlayerName(source), hasBypass)
     end
-    -- Send server-wide chat message (keep as is)
-    local msg = peacetimeActive and Config.Message.Active:gsub('{activator}', GetPlayerName(source)) or Config.Message.Deactive:gsub('{activator}', GetPlayerName(source))
+    -- Send server-wide chat message with duration
+    local durationText = duration > 0 and ' for ' .. duration .. ' seconds' or ''
+    local msg = (peacetimeActive and Config.Message.Active or Config.Message.Deactive):gsub('{activator}', GetPlayerName(source)) .. durationText
     TriggerClientEvent('chat:addMessage', -1, {color = peacetimeActive and {0, 255, 0} or {255, 0, 0}, args = {Config.Message.Prefix, msg}})
     SendWebhook(source, peacetimeActive)
     
     -- Reintroduce timer for auto-toggle if Duration > 0
-    if peacetimeActive and Config.Duration > 0 then
+    if peacetimeActive and duration > 0 then
         if peacetimeTimer then Citizen.ClearTimeout(peacetimeTimer) end
-        peacetimeTimer = Citizen.SetTimeout(Config.Duration * 1000, function()
+        peacetimeTimer = Citizen.SetTimeout(duration * 1000, function()
             peacetimeActive = false
             TriggerClientEvent('peacetime:toggle', -1, peacetimeActive, 'System')
             SendWebhook(-1, peacetimeActive)
