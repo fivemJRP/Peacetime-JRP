@@ -16,34 +16,45 @@ AddEventHandler('peacetime:toggle', function(status, activator)
     peacetimeActive = status
     
     if status then
-        SetTimecycleModifier('hud_def_blur')
-        SetTimecycleModifierStrength(0.5)
-        local message = Config.Message.Active:gsub('{activator}', activator or 'Unknown')  -- This displays the activator in notifications
-        ShowAdvancedNotification('CHAR_DEFAULT', 'CHAR_DEFAULT', Config.Message.Prefix, '~r~Peace Enforced!~s~', message, 1)
+        local message = Config.Message.Active:gsub('{activator}', activator or 'Unknown')
+        SetNotificationTextEntry('STRING')
+        AddTextComponentString('~r~' .. Config.Message.Prefix .. '~s~\n' .. message)
+        DrawNotification(false, false)  -- Fixed to use valid natives
         BeginTextCommandDisplayHelp('STRING')
         AddTextComponentSubstringPlayerName('Peacetime is active: Weapons disabled. Stay chill!')
         EndTextCommandDisplayHelp(0, false, true, -1)
         if peacetimeThread then return end  -- Prevent duplicate threads to avoid resource waste
         peacetimeThread = Citizen.CreateThread(function()
             while peacetimeActive do
-                Citizen.Wait(Config.LoopWait)  -- Configurable wait reduces CPU load; higher values improve performance but may delay enforcement
+                Citizen.Wait(Config.LoopWait)
                 local ped = PlayerPedId()
-                if IsPedArmed(ped, 4) then
-                    SetPlayerCanDoDriveBy(ped, false)
-                    DisablePlayerFiring(ped, true)
-                    SetPedCanSwitchWeapon(ped, false)  -- Additional control to fully disable weapon interactions
-                end
+                -- Disable firing and controls without removing weapons or disabling wheel
+                DisablePlayerFiring(ped, true)
+                SetPlayerCanDoDriveBy(ped, false)
+                -- Removed SetPedCanSwitchWeapon to keep weapon wheel accessible
+                DisableControlAction(0, 24, true)  -- Attack
+                DisableControlAction(0, 25, true)  -- Aim
+                DisableControlAction(0, 140, true)  -- Melee
+                DisableControlAction(0, 141, true)  -- Melee alt
+                DisableControlAction(0, 142, true)  -- Melee heavy
+                -- Additional disables for weapon firing
+                DisableControlAction(0, 257, true)  -- Attack 2 (for some weapons)
+                DisableControlAction(0, 263, true)  -- Input attack (alternative)
+                DisableControlAction(0, 264, true)  -- Input aim (alternative)
             end
             peacetimeThread = nil  -- Clean up to free memory and prevent leaks
         end)
     else
-        ClearTimecycleModifier()
-        local message = Config.Message.Deactive:gsub('{activator}', activator or 'Unknown')  -- This displays the activator in notifications
-        ShowAdvancedNotification('CHAR_DEFAULT', 'CHAR_DEFAULT', Config.Message.Prefix, '~g~Peace Lifted!~s~', message, 1)
+        local message = Config.Message.Deactive:gsub('{activator}', activator or 'Unknown')
+        SetNotificationTextEntry('STRING')
+        AddTextComponentString('~g~' .. Config.Message.Prefix .. '~s~\n' .. message)
+        DrawNotification(false, false)  -- Fixed to use valid natives
         ClearHelp(true)
         if peacetimeThread then
             TerminateThread(peacetimeThread)  -- Efficiently stop thread when peacetime ends, saving CPU
             peacetimeThread = nil
         end
+        local ped = PlayerPedId()
+        -- Removed SetPedCanSwitchWeapon enable since it's not disabled
     end
 end)

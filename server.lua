@@ -17,21 +17,12 @@ RegisterCommand(Config.Command, function(source, args, rawCommand)
     Citizen.Wait(100)  -- Throttle rapid toggles to prevent command spam and server overload
     peacetimeActive = not peacetimeActive
     TriggerClientEvent('peacetime:toggle', -1, peacetimeActive, GetPlayerName(source))
+    -- Send server-wide chat message
+    local msg = peacetimeActive and Config.Message.Active:gsub('{activator}', GetPlayerName(source)) or Config.Message.Deactive:gsub('{activator}', GetPlayerName(source))
+    TriggerClientEvent('chat:addMessage', -1, {color = peacetimeActive and {0, 255, 0} or {255, 0, 0}, args = {Config.Message.Prefix, msg}})
     SendWebhook(source, peacetimeActive)
     
-    if peacetimeActive and Config.Duration > 0 then
-        if peacetimeTimer then Citizen.ClearTimeout(peacetimeTimer) end  -- Clear existing timer to avoid overlaps
-        peacetimeTimer = Citizen.SetTimeout(Config.Duration * 1000, function()
-            peacetimeActive = false
-            TriggerClientEvent('peacetime:toggle', -1, peacetimeActive, 'System')
-            SendWebhook(-1, peacetimeActive)
-        end)
-    elseif not peacetimeActive then
-        if peacetimeTimer then
-            Citizen.ClearTimeout(peacetimeTimer)  -- Ensure cleanup to prevent memory leaks
-            peacetimeTimer = nil
-        end
-    end
+    -- Removed timer logic since Duration = 0
 end)
 
 function SendWebhook(source, status)
@@ -53,12 +44,18 @@ function SendWebhook(source, status)
     }
     
     if Config.WebhookURL then
+        local payload = json.encode({username = Config.WebhookName, embeds = discordEmbed})
+        print('Sending webhook to: ' .. string.sub(Config.WebhookURL, 1, 50) .. '...' .. ' | Payload size: ' .. #payload .. ' bytes')
         PerformHttpRequest(Config.WebhookURL, function(err, text, headers)
-            if err == 200 or err == 204 then  -- 204 is success for Discord webhooks (No Content)
-                print('Webhook sent successfully!')
+            if err == 200 or err == 204 then
+                print('Webhook sent successfully! Status: ' .. tostring(err))
+            elseif err == 0 then
+                print('Webhook error: Network failure (status 0) - Check your webhook URL or internet connection. URL: ' .. string.sub(Config.WebhookURL, 1, 50) .. '...')
             else
-                print('Webhook error: ' .. tostring(err))
+                print('Webhook error: ' .. tostring(err) .. ' | Response: ' .. (text or 'No response') .. ' | Headers: ' .. json.encode(headers or {}))
             end
-        end, 'POST', json.encode({username = Config.WebhookName, embeds = discordEmbed}), { ['Content-Type'] = 'application/json' })
+        end, 'POST', payload, { ['Content-Type'] = 'application/json' })
+    else
+        print('Webhook URL not set in config.lua')
     end
 end
