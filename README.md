@@ -4,50 +4,53 @@
 [![Lua](https://img.shields.io/badge/Language-Lua-blue)](https://www.lua.org/)  
 [![License](https://img.shields.io/badge/License-None-lightgrey)]()
 
-A sleek, performance-optimized peacetime script for FiveM roleplay servers. Enforce calm by disabling weapons and drive-by during active peacetime, with immersive notifications, screen effects, and Discord logging. Perfect for events or server-wide chill vibes! 🕊️
+A sleek, performance-optimized peacetime script for FiveM roleplay servers. Enforce calm by disabling weapons, drive-by, and melee during active peacetime, with immersive notifications, chat announcements, and Discord logging. Perfect for events or server-wide chill vibes! 🕊️
 
 ## ✨ Features
-- **Dynamic Toggling**: Admins can toggle peacetime with a simple command, including auto-deactivation after a set duration.
-- **Weapon Control**: Automatically disables firing, drive-by, and weapon switching when peacetime is active.
-- **Immersive UI**: Cool notifications with emojis, screen blur effects, and help text for players.
-- **Personalized Messages**: Displays the activator's name in notifications for accountability.
-- **Discord Integration**: Logs toggles to a webhook with timestamps and details.
-- **Performance Optimized**: Conditional threads and configurable loop waits to minimize CPU usage.
-- **Configurable**: Easy-to-edit settings for commands, permissions, messages, and more.
+- **Dynamic Toggling**: Admins can toggle peacetime with `/peacetime [seconds]` (defaults to 300 if not specified).
+- **Weapon Control**: Disables firing, drive-by, melee, and weapon switching while keeping the wheel accessible.
+- **Admin Bypass**: Configurable option for admins to bypass restrictions.
+- **Immersive UI**: Cool notifications with emojis, help text, and activator names.
+- **Server-Wide Messages**: Chat broadcasts with duration info.
+- **Discord Logging**: Webhook integration with timestamps, fields, and retries.
+- **Performance Optimized**: Conditional threads, configurable loops, and caching for minimal CPU usage.
+- **Configurable**: Easy settings for commands, permissions, messages, and more.
 
 ## 🚀 Installation
-1. Download the script files (`server.lua`, `client.lua`, `config.lua`).
-2. Place them in your FiveM resource folder: `resources/[your-resource-name]/`.
-3. Add `start [your-resource-name]` to your `server.cfg`.
-4. Configure `config.lua` with your settings (e.g., webhook URL, permissions).
-5. Restart your server and enjoy! 🎉
+1. Download from GitHub: [https://github.com/fivemJRP/Peacetime-JRP](https://github.com/fivemJRP/Peacetime-JRP)
+2. Place in `resources/[your-resource-name]/`
+3. Add `start [your-resource-name]` to `server.cfg`
+4. Configure `config.lua` (webhook, perms, bypass, etc.)
+5. Restart and enjoy! 🎉
 
 ### Dependencies
 - FiveM server (latest recommended).
-- No external dependencies—just pure Lua magic.
+- No external dependencies—just pure Lua goodness.
 
 ## 📖 Usage
-- **Command**: Use `/peacetime` (requires ACE permission `peacetime.toggle`).
-- **For Players**: When peacetime is active, weapons are disabled, and you'll see cool notifications.
-- **For Admins**: Toggle anytime; the system auto-logs to Discord.
+- **Command**: `/peacetime [seconds]` (admins only, e.g., `/peacetime 600` for 10 minutes)
+- **For Players**: Weapons disabled during peacetime, notifications shown.
+- **For Admins**: Toggle anytime; bypass if enabled in config.
 
-### Example Notification
-When activated:  
-![Notification Example](https://via.placeholder.com/300x100?text=🔒+Peacetime+activated+by+Admin!+Weapons+on+lockdown.+Chill!+🕊️)
+Example Chat Message:
+```
+🌿 Peacetime Alert: 🔒 Peacetime activated by Admin! Weapons and chaos are on lockdown. Time to chill! 🕊️ for 300 seconds
+```
 
 ## ⚙️ Configuration
 Edit `config.lua` to customize:
 - `Config.Command`: Change the toggle command.
-- `Config.Duration`: Set auto-deactivation time (in seconds).
-- `Config.LoopWait`: Adjust performance (higher = better CPU, lower = more responsive).
+- `Config.Duration`: Set default auto-deactivation time (in seconds).
+- `Config.AllowAdminBypass`: Enable/disable admin bypass.
+- `Config.LoopWait`: Adjust performance (lower = more responsive).
 - `Config.Message`: Tweak notification text with `{activator}` placeholder.
 - `Config.WebhookURL`: Add your Discord webhook for logging.
 
 ```lua
 Config = {
     Command = 'peacetime',
-    Duration = 300,  -- 5 minutes
-    LoopWait = 1000,  -- 1 second checks
+    Duration = 300,  -- Default 5 minutes
+    AllowAdminBypass = true,  -- Admins bypass restrictions
     Message = {
         Prefix = '🌿 Peacetime Alert',
         Active = '🔒 Peacetime activated by {activator}! Time to chill! 🕊️'
@@ -59,5 +62,5 @@ Config = {
 Got ideas to make it cooler? Fork the repo, tweak the code, and submit a PR. Let's keep the peace flowing! 💡
 
 ## 📞 Support
-- Issues? Open a GitHub issue or hit up the FiveM forums.
+- Issues? Open a GitHub issue or check the repo for updates.
 - Inspired by community scripts—stay peaceful out there! ⚡
