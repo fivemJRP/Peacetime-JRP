@@ -54,8 +54,10 @@ function SendWebhook(source, status)
     
     if Config.WebhookURL then
         PerformHttpRequest(Config.WebhookURL, function(err, text, headers)
-            if err ~= 200 then
-                print('Webhook error: ' .. tostring(err))  -- Async handling prevents blocking server threads
+            if err == 200 or err == 204 then  -- 204 is success for Discord webhooks (No Content)
+                print('Webhook sent successfully!')
+            else
+                print('Webhook error: ' .. tostring(err))
             end
         end, 'POST', json.encode({username = Config.WebhookName, embeds = discordEmbed}), { ['Content-Type'] = 'application/json' })
     end
