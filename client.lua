@@ -25,9 +25,9 @@ AddEventHandler('peacetime:toggle', function(status, activator, hasBypass)
         EndTextCommandDisplayHelp(0, false, true, -1)
         if peacetimeThread then return end
         peacetimeThread = Citizen.CreateThread(function()
-            local ped = PlayerPedId()
             while peacetimeActive do
                 Citizen.Wait(Config.LoopWait or 1)
+                local ped = PlayerPedId()  -- Moved inside loop for dynamic ped changes
                 if not hasBypass then  -- Skip disables if admin bypass is enabled
                     DisablePlayerFiring(ped, true)
                     SetPlayerCanDoDriveBy(ped, false)

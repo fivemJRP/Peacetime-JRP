@@ -14,6 +14,9 @@ Config.ACEPerm = 'peacetime.toggle'
 -- Allow admins to bypass peacetime restrictions
 Config.AllowAdminBypass = false  -- Set to false to disable admin bypass
 
+-- Enable debug mode for console prints (e.g., webhook details)
+Config.Debug = false  -- Set to true to enable debug prints
+
 -- Duration in seconds for peacetime to auto-deactivate (0 = no auto-deactivation) - can be overridden by command argument
 Config.Duration = 300  -- Default 5 minutes; set to 0 for manual
 

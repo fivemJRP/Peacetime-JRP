@@ -14,13 +14,14 @@ A sleek, performance-optimized peacetime script for FiveM roleplay servers. Enfo
 - **Server-Wide Messages**: Chat broadcasts with duration info.
 - **Discord Logging**: Webhook integration with timestamps, fields, and retries.
 - **Performance Optimized**: Conditional threads, configurable loops, and caching for minimal CPU usage.
+- **Debug Mode**: Optional console prints for troubleshooting.
 - **Configurable**: Easy settings for commands, permissions, messages, and more.
 
 ## 🚀 Installation
 1. Download from GitHub: [https://github.com/fivemJRP/Peacetime-JRP](https://github.com/fivemJRP/Peacetime-JRP)
 2. Place in `resources/[your-resource-name]/`
 3. Add `start [your-resource-name]` to `server.cfg`
-4. Configure `config.lua` (webhook, perms, bypass, etc.)
+4. Configure `config.lua` (webhook, perms, bypass, debug, etc.)
 5. Restart and enjoy! 🎉
 
 ### Dependencies
@@ -42,6 +43,7 @@ Edit `config.lua` to customize:
 - `Config.Command`: Change the toggle command.
 - `Config.Duration`: Set default auto-deactivation time (in seconds).
 - `Config.AllowAdminBypass`: Enable/disable admin bypass.
+- `Config.Debug`: Enable/disable debug prints.
 - `Config.LoopWait`: Adjust performance (lower = more responsive).
 - `Config.Message`: Tweak notification text with `{activator}` placeholder.
 - `Config.WebhookURL`: Add your Discord webhook for logging.
@@ -51,6 +53,7 @@ Config = {
     Command = 'peacetime',
     Duration = 300,  -- Default 5 minutes
     AllowAdminBypass = true,  -- Admins bypass restrictions
+    Debug = false,  -- Enable debug prints
     Message = {
         Prefix = '🌿 Peacetime Alert',
         Active = '🔒 Peacetime activated by {activator}! Time to chill! 🕊️'
