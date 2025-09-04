@@ -1,26 +1,29 @@
 Config = {}
 
---Command to start the script
+-- Command to toggle peacetime
 Config.Command = 'peacetime'
 
---Chat suggestion for command
-Config.CommandSuggestion = 'Toggle peacetime'
+-- Chat suggestion for the command
+Config.CommandSuggestion = 'Toggle peacetime mode'
 
---ACE Permission required to run the command
+-- ACE permission required to run the command
 Config.ACEPerm = 'peacetime.toggle'
 
---Color of the "author" of the message
-Config.MessageColor = {255, 0, 0}
+-- Duration in seconds for peacetime to auto-deactivate (0 = no auto-deactivation)
+Config.Duration = 300  -- e.g., 5 minutes
 
---Message announcing peacetime change
+-- Loop wait time in ms for client-side checks (higher = better performance, lower = more responsive)
+Config.LoopWait = 1000  -- Default 1 second
+
+-- Notification messages for peacetime changes (use {activator} for the player's name)
 Config.Message = {
-    Prefix = 'Peacetime',
-    Active = 'Peacetime has been activated!',
-    Deactive = 'Peacetime has been deactivated!',
+    Prefix = '🌿 Peacetime Alert',
+    Active = '🔒 Peacetime activated by {activator}! Weapons and chaos are on lockdown. Time to chill! 🕊️',
+    Deactive = '🔓 Peacetime deactivated by {activator}! Back to the wild west. Stay safe! ⚡'
 }
 
---Discord Webhook Link
-Config.WebhookURL = ''
+-- Discord webhook URL for logging
+Config.WebhookURL = 'PUT WEBHOOK HERE'  -- Replace with your actual webhook URL
 
---This is the name of the "user" that will post the webhook
+-- Name of the webhook "user"
 Config.WebhookName = 'Peacetime Logs'

@@ -1,18 +1,14 @@
 fx_version 'cerulean'
-games {'gta5'}
+game 'gta5'
 
-description 'JRP Peacetime Shooting Prevention and Announcement'
-author 'JRP Development Team'
-version 'v1.2'
+author 'Justice Gaming Network (JGN) - Elevate your FiveM experience!'
+description 'A performance-optimized peacetime script for FiveM RP servers. Disable weapons during peacetime with cool notifications and logging.'
+version '1.0.0'
 
-shared_scripts {
-    'config.lua',
-}
+shared_script 'config.lua'
+client_script 'client.lua'
+server_script 'server.lua'
 
-client_scripts {
-    'client.lua',
-}
-
-server_scripts {
-    'server.lua',
-}
+-- No dependencies required; pure Lua goodness!
+-- Optimized by Justice Gaming Network (JGN) - Elevate your FiveM experience with top-tier scripts!
+-- Visit us at https://justicerp.xyz or join our Discord: https://discord.gg/JRP
